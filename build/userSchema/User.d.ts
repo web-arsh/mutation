@@ -7,7 +7,7 @@ interface IUser extends Document {
     password: string;
     comment?: mongoose.Types.ObjectId[];
 }
-declare const User: Model<IUser>;
-declare const Comment: Model<IComment>;
-export { User, Comment };
+declare const UserModel: Model<IUser>;
+declare const CommentModel: Model<IComment>;
+export { UserModel, CommentModel };
 //# sourceMappingURL=User.d.ts.map

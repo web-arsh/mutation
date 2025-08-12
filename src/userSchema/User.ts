@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema<IUser>({
         type: String,
         required: true,
         unique: true,
-    },
+    },  
     password: {
         type: String,
         required: true,
@@ -38,7 +38,7 @@ const commentSchema = new mongoose.Schema<IComment>({
 
 
 
-const User: Model<IUser> = mongoose.models.User || mongoose.model<IUser>("NewUser",userSchema);
-const Comment: Model<IComment> = mongoose.models.Comment || mongoose.model<IComment>("NewComment",commentSchema);
+const UserModel: Model<IUser> = mongoose.models.User || mongoose.model<IUser>("NewUser",userSchema);
+const CommentModel: Model<IComment> = mongoose.models.Comment || mongoose.model<IComment>("NewComment",commentSchema);
 
-export {User,Comment};
+export {UserModel,CommentModel};

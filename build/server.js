@@ -1,10 +1,11 @@
+import "./libs/dbConnect.js";
 import express, {} from "express";
 import { globalError } from "./middlware/globalError.js";
+import { userRoute } from "./VIew/User.js";
 const app = express();
 const PORT = process.env.PORT || 3000;
-app.get("/", (req, res) => {
-    res.send("hammad");
-});
+app.use(express.json());
+app.use("/", userRoute);
 app.use(globalError);
 app.listen(PORT, () => console.log(`Server started at ${PORT}`));
 //# sourceMappingURL=server.js.map

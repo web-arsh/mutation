@@ -23,7 +23,7 @@ const commentSchema = new mongoose.Schema({
         required: true
     }
 });
-const User = mongoose.models.User || mongoose.model("NewUser", userSchema);
-const Comment = mongoose.models.Comment || mongoose.model("NewComment", commentSchema);
-export { User, Comment };
+const UserModel = mongoose.models.User || mongoose.model("NewUser", userSchema);
+const CommentModel = mongoose.models.Comment || mongoose.model("NewComment", commentSchema);
+export { UserModel, CommentModel };
 //# sourceMappingURL=User.js.map
