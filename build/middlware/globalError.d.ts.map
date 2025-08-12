@@ -1,0 +1,1 @@
+{"version":3,"file":"globalError.d.ts","sourceRoot":"","sources":["../../src/middlware/globalError.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,OAAO,EAAE,QAAQ,EAAE,MAAM,SAAS,CAAC;AACjD,OAAO,KAAK,MAAM,MAAM,mBAAmB,CAAC;AAE5C,QAAA,MAAM,WAAW,GAAI,KAAK,MAAM,EAAC,KAAK,OAAO,EAAE,KAAK,QAAQ,EAAC,MAAM,GAAG,uCAUrE,CAAA;AAED,OAAO,EAAC,WAAW,EAAC,CAAA"}
