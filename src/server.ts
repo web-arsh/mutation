@@ -57,7 +57,7 @@ const startServer = async () => {
                         const result = await axios.post("http://localhost:3000/login",args)        
                         return result.data;
                     } catch (err) {
-                        let message = "An unknown error is occured!"
+                        let message:String = "An unknown error is occured!"
                         //***********Fix ERROR */
                         if (axios.isAxiosError(err)){
                             message = err.response?.data.message;
