@@ -1,7 +1,7 @@
 import "./libs/dbConnect.js";
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@as-integrations/express5";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import cors from "cors";
 import express from "express";
 import { userRoute } from "./VIew/User.js";
@@ -41,7 +41,20 @@ const startServer = async () => {
                 comment: (user) => (user?.comment.map(async (item) => (await axios.get(`http://localhost:3000/comment/${item}`)).data))
             },
             Query: {
-                getAllUser: async () => (await axios.get("http://localhost:3000/show")).data,
+                getAllUser: async (_, __, context) => {
+                    try {
+                        //authenticate middleware 
+                        if (context.token === "Error")
+                            throw new Error("Un Authorized");
+                        const user = (await axios.get("http://localhost:3000/show")).data;
+                        return user;
+                    }
+                    catch (err) {
+                        if (Error.isError(err)) {
+                            console.log({ error: err.message });
+                        }
+                    }
+                },
                 getUser: async (_, { id }) => (await axios.get(`http://localhost:3000/single/${id}`)).data
             },
             Mutation: {
@@ -56,7 +69,6 @@ const startServer = async () => {
                         if (axios.isAxiosError(err)) {
                             message = err.response?.data.message;
                         }
-                        ;
                         return { message };
                     }
                 }
@@ -64,7 +76,10 @@ const startServer = async () => {
         }
     });
     await server.start();
-    app.use("/graphql", expressMiddleware(server));
+    app.use("/graphql", expressMiddleware(server, {
+        // authentication middleware
+        context: async ({ req }) => ({ token: "Error" })
+    }));
     app.use(globalError);
     app.listen(PORT, () => console.log(`Server started at ${PORT}`));
 };

@@ -1,11 +1,12 @@
 import "./libs/dbConnect.js";
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@as-integrations/express5";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import cors from "cors";
 import express from "express";
 import { userRoute } from "./VIew/User.js";
 import { globalError } from "./middlware/globalError.js";
+
 
 const startServer = async () => {
     const app = express();
@@ -48,7 +49,19 @@ const startServer = async () => {
             },
 
             Query: {
-                getAllUser: async () => (await axios.get("http://localhost:3000/show")).data,
+                getAllUser: async (_,__,context: any) => {
+                    try {
+
+                        //authenticate middleware 
+                        if(context.token === "Error") throw new Error("Un Authorized");
+                        const user = (await axios.get("http://localhost:3000/show")).data
+                        return user;
+                    } catch (err) {
+                        if(Error.isError(err)){
+                            console.log({error: err.message});
+                        }
+                    }
+                },
                 getUser: async (_: unknown,{id}: {id: string}) => (await axios.get(`http://localhost:3000/single/${id}`)).data 
             },
             Mutation:{
@@ -57,11 +70,11 @@ const startServer = async () => {
                         const result = await axios.post("http://localhost:3000/login",args)        
                         return result.data;
                     } catch (err) {
-                        let message:String = "An unknown error is occured!"
+                        let message: String = "An unknown error is occured!"
                         //***********Fix ERROR */
                         if (axios.isAxiosError(err)){
                             message = err.response?.data.message;
-                        };
+                        }
                         
                         return {message};    
                     }
@@ -74,7 +87,10 @@ const startServer = async () => {
     
     await server.start();
 
-    app.use("/graphql",expressMiddleware(server));
+    app.use("/graphql",expressMiddleware(server,{
+        // authentication middleware
+        context: async ({req}) => ({token: "Error"})
+    }));
     
     app.use(globalError);
 
