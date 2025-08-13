@@ -22,7 +22,7 @@ const CreateUser = async (req, res, next) => {
             email,
             password: hashPasword
         });
-        return res.json(user);
+        return res.json({ message: "User Created" });
     }
     catch (err) {
         let message = "An unknown error is occured!";
@@ -32,5 +32,32 @@ const CreateUser = async (req, res, next) => {
         return next(new AppErr(message, 500));
     }
 };
-export { CreateUser };
+const showUser = async (req, res, next) => {
+    try {
+        const result = await UserModel.find();
+        return res.json(result);
+    }
+    catch (err) {
+        let message = "An unknow error is occured!";
+        if (err instanceof Error) {
+            message = err.message;
+        }
+        return next(new AppErr(message, 500));
+    }
+};
+const singleUser = async (req, res, next) => {
+    try {
+        const id = req.params.id;
+        const result = await UserModel.findById(id);
+        return res.json(result);
+    }
+    catch (err) {
+        let message = "An unknow error is occured!";
+        if (err instanceof Error) {
+            message = err.message;
+        }
+        return next(new AppErr(message, 500));
+    }
+};
+export { CreateUser, showUser, singleUser };
 //# sourceMappingURL=User.js.map

@@ -30,7 +30,7 @@ const CreateUser = async (req: Request,res: Response,next: NextFunction) => {
             password: hashPasword
         });
 
-        return res.json(user);
+        return res.json({message: "User Created"});
     } catch (err) {
         
         let message:string = "An unknown error is occured!";
@@ -38,10 +38,37 @@ const CreateUser = async (req: Request,res: Response,next: NextFunction) => {
         if(err instanceof Error){
             message = err.message;
         }
-
         return next(new AppErr(message,500));
     }
 }
 
 
-export {CreateUser}
+const showUser = async (req: Request,res: Response,next: NextFunction) => {
+    try {
+        const result = await UserModel.find();        
+        return res.json(result);
+    } catch (err) {
+        let message = "An unknow error is occured!";
+        if(err instanceof Error) {
+            message = err.message;
+        }
+        return next(new AppErr(message,500));
+    }
+}
+
+const singleUser = async (req: Request,res: Response,next: NextFunction) => {
+    try {
+        const id = req.params.id;
+        const result = await UserModel.findById(id);        
+        return res.json(result);
+    } catch (err) {
+        let message = "An unknow error is occured!";
+        if(err instanceof Error) {
+            message = err.message;
+        }
+        return next(new AppErr(message,500));
+    }
+}
+
+
+export {CreateUser,showUser,singleUser}
